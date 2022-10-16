@@ -34,21 +34,12 @@ const queryDB = async (conn, h3Index) => {
 
 const getData = async (conn, h3Index) => {
     const items = getRing(h3Index);
-    var arr = [];
+    let arr = [];
 
-    queryDB(conn, "851fb397fffffff").then(res => {
-        arr.push(res);
-    }).catch(err => {
-        console.log(err);
-    });
-
-    // items.forEach(function (item, index, array){
-    //     queryDB(conn, item).then(res => {
-    //         arr.push(res);
-    //     }).catch(err => {
-    //         console.log(err);
-    //     });
-    // });
+    for (let i = 0; i < items.length; i++) {
+        let tmp = await queryDB(conn, items[i]);
+        arr = arr.concat(...arr, tmp);
+    }
 
     return arr;
 };
@@ -59,8 +50,7 @@ async function home (req, res) {
         // example : 851fb42bfffffff
         // example : 851fb397fffffff
         conn = await pool.getConnection();
-        const data = getData(conn, "851fb397fffffff");
-        console.log(data);
+        const data = await getData(conn, "851fb397fffffff");
         res.send(data);
     } catch (err) {
         throw err;
