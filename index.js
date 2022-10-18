@@ -24,18 +24,14 @@ function getRing(h3Index) {
 }
 
 const queryDB = async (conn, h3Index) => {
-    try {
-        const res = await conn.query(`SELECT * FROM sample.${h3Index}`);
-        return res;
-    } catch (err) {
-        throw err;
-    }
+    const res = await conn.query(`SELECT * FROM sample.${h3Index}`);
+    return res;
 };
 
 const getData = async (conn, h3Index) => {
     const items = getRing(h3Index);
-    let arr = [];
 
+    let arr = [];
     for (let i = 0; i < items.length; i++) {
         let tmp = await queryDB(conn, items[i]);
         arr = arr.concat(...arr, tmp);
@@ -45,6 +41,7 @@ const getData = async (conn, h3Index) => {
 };
 
 async function home (req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
     let conn;
     try {
         // example : 851fb42bfffffff
@@ -62,5 +59,5 @@ async function home (req, res) {
 app.get('/', home);
 
 // PORT
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3300;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
