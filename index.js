@@ -4,7 +4,6 @@ import mariadb from 'mariadb';
 import h3 from "h3-js";
 import express from 'express';
 
-import { azimuth, haversine } from './src/utilities/math.js';
 
 dotenv.config();
 
@@ -32,6 +31,7 @@ const getData = async (conn, h3Index) => {
     const items = getRing(h3Index);
 
     let arr = [];
+    let tmp = [];
     for (let i = 0; i < items.length; i++) {
         let tmp = await queryDB(conn, items[i]);
         arr = arr.concat(...arr, tmp);
@@ -40,8 +40,14 @@ const getData = async (conn, h3Index) => {
     return arr;
 };
 
-async function home (req, res) {
+async function result (req, res) {
     res.header("Access-Control-Allow-Origin", "*");
+    const {lat, lon, km, angle} = req.params;
+    console.log(lat);
+    console.log(lon);
+    console.log(km);
+    console.log(angle);
+    
     let conn;
     try {
         // example : 851fb42bfffffff
@@ -56,7 +62,12 @@ async function home (req, res) {
     }
 }
 
+async function home (req, res) {
+    console.log("Hello");
+}
 app.get('/', home);
+// GET + uri 파라메터로 데이터 전송
+app.get('/result/:lat/:lon/:km/:angle', result);
 
 // PORT
 const port = process.env.PORT || 3300;
