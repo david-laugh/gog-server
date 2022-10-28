@@ -4,6 +4,8 @@ import mariadb from 'mariadb';
 import h3 from "h3-js";
 import express from 'express';
 
+import { haversine, azimuth } from './utilities/Math.js';
+
 
 dotenv.config();
 
@@ -28,13 +30,47 @@ const queryDB = async (conn, h3Index) => {
 };
 
 const getData = async (conn, h3Index) => {
+    const sX = 48.06869406823506;
+    const sY = 3.74459769969682;
     const items = getRing(h3Index);
 
     let arr = [];
     let tmp = [];
     for (let i = 0; i < items.length; i++) {
         let tmp = await queryDB(conn, items[i]);
-        arr = arr.concat(...arr, tmp);
+        for (let j = 0; j < tmp.length; j++) {
+            let d = haversine(sX, sY, tmp[j]["lat"], tmp[j]["lon"]);
+            console.log(d);
+            if (d < 5) {
+                arr.push({
+                    lat: tmp[j]["lat"],
+                    lon: tmp[j]["lon"],
+                    color: '#FF0000',
+                    radius: 200
+                });
+            } else if ( d > 5 && d < 10 ) {
+                arr.push({
+                    lat: tmp[j]["lat"],
+                    lon: tmp[j]["lon"],
+                    color: '#0000FF',
+                    radius: 200
+                });
+            } else if ( d > 10 && d < 15 ) {
+                arr.push({
+                    lat: tmp[j]["lat"],
+                    lon: tmp[j]["lon"],
+                    color: '#FF0000',
+                    radius: 200
+                });
+            } else if ( d > 20 ) {
+                arr.push({
+                    lat: tmp[j]["lat"],
+                    lon: tmp[j]["lon"],
+                    color: '#0000FF',
+                    radius: 200
+                });
+            }
+        }
     }
 
     return arr;
@@ -62,12 +98,7 @@ async function result (req, res) {
     }
 }
 
-async function home (req, res) {
-    console.log("Hello");
-}
-app.get('/', home);
-// GET + uri 파라메터로 데이터 전송
-app.get('/result/:lat/:lon/:km/:angle', result);
+app.get('/Result/:lat/:lon/:km/:angle', result);
 
 // PORT
 const port = process.env.PORT || 3300;
