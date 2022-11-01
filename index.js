@@ -20,8 +20,13 @@ const pool = mariadb.createPool({
     password: process.env.DB_PASSWORD + "#",
 });
 
-function getRing(h3Index) {
-    return h3.gridDisk(h3Index, 1);
+function getRing(h3Index, km) {
+    if ( km > 10 ){
+        return h3.gridDisk(h3Index, 2);
+    }
+    else {
+        return h3.gridDisk(h3Index, 1);
+    }
 }
 
 const queryDB = async (conn, h3Index) => {
@@ -29,46 +34,210 @@ const queryDB = async (conn, h3Index) => {
     return res;
 };
 
-const getData = async (conn, h3Index) => {
-    const sX = 48.06869406823506;
-    const sY = 3.74459769969682;
-    const items = getRing(h3Index);
+function getKmList(km) {
+    return [km * (1/4), km * (2/4), km * (3/4), km * (4/4)];
+}
+
+function getAngleList(angle) {
+    let arr = [0];
+    let tmp = 360 / angle;
+    for (let i = 0; i < tmp; i++) {
+        arr.push(360 * ( (i+1) / tmp));
+        console.log(360 * ( (i+1) / tmp));
+    }
+    return arr;
+}
+
+const getData = async (conn, km, angle, lat, lon) => {
+    const h3_code = h3.latLngToCell(lat, lon, 5);
+    const items = getRing(h3_code, km);
+    const km_list = getKmList(km);
+    const angle_list = getAngleList(60);
 
     let arr = [];
     let tmp = [];
     for (let i = 0; i < items.length; i++) {
         let tmp = await queryDB(conn, items[i]);
         for (let j = 0; j < tmp.length; j++) {
-            let d = haversine(sX, sY, tmp[j]["lat"], tmp[j]["lon"]);
-            console.log(d);
-            if (d < 5) {
-                arr.push({
-                    lat: tmp[j]["lat"],
-                    lon: tmp[j]["lon"],
-                    color: '#FF0000',
-                    radius: 200
-                });
-            } else if ( d > 5 && d < 10 ) {
-                arr.push({
-                    lat: tmp[j]["lat"],
-                    lon: tmp[j]["lon"],
-                    color: '#0000FF',
-                    radius: 200
-                });
-            } else if ( d > 10 && d < 15 ) {
-                arr.push({
-                    lat: tmp[j]["lat"],
-                    lon: tmp[j]["lon"],
-                    color: '#FF0000',
-                    radius: 200
-                });
-            } else if ( d > 20 ) {
-                arr.push({
-                    lat: tmp[j]["lat"],
-                    lon: tmp[j]["lon"],
-                    color: '#0000FF',
-                    radius: 200
-                });
+            let d = haversine(lat, lon, tmp[j]["lat"], tmp[j]["lon"]);
+            let a = azimuth(lat, lon, tmp[j]["lat"], tmp[j]["lon"]);
+            // console.log(d);
+            if (d <= km_list[0]) {
+                if ( a > angle_list[0] && a <= angle_list[1]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[1] && a <= angle_list[2]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[2] && a <= angle_list[3]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[3] && a <= angle_list[4]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[4] && a <= angle_list[5]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[5] && a <= angle_list[6]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                }
+            } else if ( d > km_list[0] && d <= km_list[1] ) {
+                if ( a > angle_list[0] && a <= angle_list[1]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[1] && a <= angle_list[2]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[2] && a <= angle_list[3]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[3] && a <= angle_list[4]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[4] && a <= angle_list[5]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[5] && a <= angle_list[6]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                }
+            } else if ( d > km_list[1] && d <= km_list[2] ) {
+                if ( a > angle_list[0] && a <= angle_list[1]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[1] && a <= angle_list[2]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[2] && a <= angle_list[3]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[3] && a <= angle_list[4]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[4] && a <= angle_list[5]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[5] && a <= angle_list[6]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                }
+            } else if ( d > km_list[2] && d <= km_list[3] ) {
+                if ( a > angle_list[0] && a <= angle_list[1]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[1] && a <= angle_list[2]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[2] && a <= angle_list[3]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[3] && a <= angle_list[4]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[4] && a <= angle_list[5]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[5] && a <= angle_list[6]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                }
             }
         }
     }
@@ -78,18 +247,15 @@ const getData = async (conn, h3Index) => {
 
 async function result (req, res) {
     res.header("Access-Control-Allow-Origin", "*");
-    const {lat, lon, km, angle} = req.params;
-    console.log(lat);
-    console.log(lon);
-    console.log(km);
-    console.log(angle);
+    const {km, angle, lat, lon} = req.params;
     
     let conn;
     try {
         // example : 851fb42bfffffff
         // example : 851fb397fffffff
         conn = await pool.getConnection();
-        const data = await getData(conn, "851fb397fffffff");
+        const data = await getData(conn, km, angle, lat, lon);
+        // console.log(data);
         res.send(data);
     } catch (err) {
         throw err;
@@ -98,7 +264,7 @@ async function result (req, res) {
     }
 }
 
-app.get('/Result/:lat/:lon/:km/:angle', result);
+app.get('/Result/:km/:angle/:lat/:lon', result);
 
 // PORT
 const port = process.env.PORT || 3300;
