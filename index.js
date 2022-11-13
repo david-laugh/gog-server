@@ -43,7 +43,6 @@ function getAngleList(angle) {
     let tmp = 360 / angle;
     for (let i = 0; i < tmp; i++) {
         arr.push(360 * ( (i+1) / tmp));
-        console.log(360 * ( (i+1) / tmp));
     }
     return arr;
 }
@@ -52,7 +51,7 @@ const getData = async (conn, km, angle, lat, lon) => {
     const h3_code = h3.latLngToCell(lat, lon, 5);
     const items = getRing(h3_code, km);
     const km_list = getKmList(km);
-    const angle_list = getAngleList(60);
+    const angle_list = getAngleList(angle);
 
     let arr = [];
     let tmp = [];
@@ -105,6 +104,48 @@ const getData = async (conn, km, angle, lat, lon) => {
                         color: '#0000FF',
                         radius: 50
                     });
+                } else if ( a > angle_list[6] && a <= angle_list[7]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[7] && a <= angle_list[8]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[8] && a <= angle_list[9]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[9] && a <= angle_list[10]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[10] && a <= angle_list[11]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[11] && a <= angle_list[12]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
                 }
             } else if ( d > km_list[0] && d <= km_list[1] ) {
                 if ( a > angle_list[0] && a <= angle_list[1]) {
@@ -143,6 +184,48 @@ const getData = async (conn, km, angle, lat, lon) => {
                         radius: 50
                     });
                 } else if ( a > angle_list[5] && a <= angle_list[6]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[6] && a <= angle_list[7]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[7] && a <= angle_list[8]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[8] && a <= angle_list[9]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[9] && a <= angle_list[10]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[10] && a <= angle_list[11]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[11] && a <= angle_list[12]) {
                     arr.push({
                         lat: tmp[j]["lat"],
                         lon: tmp[j]["lon"],
@@ -193,6 +276,48 @@ const getData = async (conn, km, angle, lat, lon) => {
                         color: '#0000FF',
                         radius: 50
                     });
+                } else if ( a > angle_list[6] && a <= angle_list[7]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[7] && a <= angle_list[8]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[8] && a <= angle_list[9]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[9] && a <= angle_list[10]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[10] && a <= angle_list[11]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[11] && a <= angle_list[12]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
                 }
             } else if ( d > km_list[2] && d <= km_list[3] ) {
                 if ( a > angle_list[0] && a <= angle_list[1]) {
@@ -231,6 +356,48 @@ const getData = async (conn, km, angle, lat, lon) => {
                         radius: 50
                     });
                 } else if ( a > angle_list[5] && a <= angle_list[6]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[6] && a <= angle_list[7]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[7] && a <= angle_list[8]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[8] && a <= angle_list[9]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[9] && a <= angle_list[10]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#FF0000',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[10] && a <= angle_list[11]) {
+                    arr.push({
+                        lat: tmp[j]["lat"],
+                        lon: tmp[j]["lon"],
+                        color: '#0000FF',
+                        radius: 50
+                    });
+                } else if ( a > angle_list[11] && a <= angle_list[12]) {
                     arr.push({
                         lat: tmp[j]["lat"],
                         lon: tmp[j]["lon"],
