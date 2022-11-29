@@ -457,12 +457,14 @@ const getCenterData = async (conn, km, angle, lat, lon) => {
         return center_data;
     }
 
+    let data_count = 0;
     for (let i = 0; i < items.length; i++) {
         let tmp = await queryDB(country, items[i]);
         for (let j = 0; j < tmp.length; j++) {
             let d = haversine(lat, lon, tmp[j]["lat"], tmp[j]["lon"]);
             let a = azimuth(lat, lon, tmp[j]["lat"], tmp[j]["lon"]);
             if (d <= km_list[0]) {
+                data_count += 1;
                 let w = 0;
                 if ( a > angle_list[0] && a <= angle_list[1]) {
                     arr[0 + 12 * w]['lat'] += tmp[j]["lat"];
@@ -514,6 +516,7 @@ const getCenterData = async (conn, km, angle, lat, lon) => {
                     arr[11 + 12 * w]['radius'] += 1;
                 }
             } else if ( d > km_list[0] && d <= km_list[1] ) {
+                data_count += 1;
                 let w = 1;
                 if ( a > angle_list[0] && a <= angle_list[1]) {
                     arr[0 + 12 * w]['lat'] += tmp[j]["lat"];
@@ -565,6 +568,7 @@ const getCenterData = async (conn, km, angle, lat, lon) => {
                     arr[11 + 12 * w]['radius'] += 1;
                 }
             } else if ( d > km_list[1] && d <= km_list[2] ) {
+                data_count += 1;
                 let w = 2;
                 if ( a > angle_list[0] && a <= angle_list[1]) {
                     arr[0 + 12 * w]['lat'] += tmp[j]["lat"];
@@ -616,6 +620,7 @@ const getCenterData = async (conn, km, angle, lat, lon) => {
                     arr[11 + 12 * w]['radius'] += 1;
                 }
             } else if ( d > km_list[2] && d <= km_list[3] ) {
+                data_count += 1;
                 let w = 3;
                 if ( a > angle_list[0] && a <= angle_list[1]) {
                     arr[0 + 12 * w]['lat'] += tmp[j]["lat"];
@@ -670,13 +675,14 @@ const getCenterData = async (conn, km, angle, lat, lon) => {
         }
     }
 
+    console.log(data_count);
     for (let i = 0; i < 48; i++){
         if (arr[i]["radius"] != 0) {
             center_data.push({
                 lat: arr[i]["lat"] / arr[i]["radius"],
                 lon: arr[i]["lon"] / arr[i]["radius"],
                 color:'#0000FF', 
-                radius: arr[i]["radius"] / 100
+                radius: arr[i]["radius"] * (200 * 48) / (data_count > 200 * 48 ? data_count : data_count * 10)
             });
         }
     }
